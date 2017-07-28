@@ -19,7 +19,8 @@ var sortInfoByZip = function(obj) {
   for(var zip in obj) {
     output[zip] = {
       prices: [],
-      bedrooms: []
+      bedrooms: [],
+      reserved: []
     };
     for(var i = 0; i < obj[zip].length; i++) {
       for(var key in obj[zip][i]) {
@@ -36,7 +37,9 @@ var sortInfoByZip = function(obj) {
             if(!isNaN(obj[zip][i][key])){
               output[zip].prices.push(obj[zip][i][key]);
               output[zip].bedrooms.push(obj[zip][i].bedrooms);
-          }
+            } else if(obj[zip][i][key] === 'reserved') {
+              output[zip].reserved.push('reserved')
+            }
         }
       }
     }    
