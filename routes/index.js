@@ -4,8 +4,25 @@ var path = require('path')
 var rentalAnalysis = require('../rentalAnalysis');
 var linearRegression = require('../linearRegression');
 
-var lRByZip = {};
-var bRByZip = {};
+var linearRegressionByZip = {};
+var bookingRateByZip = {};
+
+var zipCalculations = function(zipcode) {
+  var { prices, bedrooms, reserved } = rentalAnalysis[zipcode];
+  if(!linearRegressionByZip.hasOwnProperty(zipcode)) {
+    linearRegressionByZip[zipcode] = linearRegression(prices, bedrooms);
+  }
+  if(!bookingRateByZip.hasOwnProperty(zipcode)) {
+    bookingRateByZip[zipcode] = Math.round(100 * (reserved.length/(prices.length + reserved.length))) / 100;
+  }
+}
+
+//middleware to check if we have lR and bR for a zip at each request
+router.use('/', function(req, res, next) {
+  var zipcode = req.body.zipcode
+  zipCalculations(zipcode)
+  next();
+});
 
 // price endpoint
 router.route('/price').post(function(req, res) {
@@ -13,14 +30,8 @@ router.route('/price').post(function(req, res) {
     var zipcode = req.body.zipcode;
     var bedroom_count = req.body.bedroom_count;
 
-    // check if the linear regression hash has info for the requested zip, if not add it
-    if(!lRByZip.hasOwnProperty(zipcode)) {
-      var { prices, bedrooms } = rentalAnalysis[zipcode]
-      lRByZip[zipcode] = linearRegression(prices, bedrooms);
-    }
-
     // destructure linear regression object for requested zip and calculate price
-    var { slope, intercept } = lRByZip[zipcode];
+    var { slope, intercept } = linearRegressionByZip[zipcode];
     var price = Math.round(slope * bedroom_count + intercept);
 
     res.send({ price })
@@ -32,14 +43,8 @@ router.route('/booking_rate').post(function(req, res) {
     var zipcode = req.body.zipcode;
     var bedroom_count = req.body.bedroom_count;
 
-    // check if our booking rate hash has info for the requested zip, if not add it
-    if(!bRByZip.hasOwnProperty(zipcode)) {
-      var { prices, reserved } = rentalAnalysis[zipcode]
-      bRByZip[zipcode] = Math.round(100 * (reserved.length/(prices.length + reserved.length))) / 100;
-    }
-
-    // calculate booking rate
-    var booking_rate = bRByZip[zipcode];
+    // lookup booking rate
+    var booking_rate = bookingRateByZip[zipcode];
 
     res.send({ booking_rate })
   });
@@ -61,26 +66,12 @@ router.route('/earnings').post(function(req, res) {
     var zipcode = req.body.zipcode;
     var bedroom_count = req.body.bedroom_count;
 
+    var { slope, intercept } = linearRegressionByZip[zipcode];
+
     var days = numberOfDays(start_date, end_date)
-    
-    // check if the linear regression hash has info for the requested zip, if not add it
-    if(!lRByZip.hasOwnProperty(zipcode)) {
-      var { prices, bedrooms } = rentalAnalysis[zipcode]
-      lRByZip[zipcode] = linearRegression(prices, bedrooms);
-    }
-
-    // destructure linear regression object for requested zip and calculate price
-    var { slope, intercept } = lRByZip[zipcode];
     var price = Math.round(slope * bedroom_count + intercept);
-
-
-    // check if our booking rate hash has info for the requested zip, if not add it
-    if(!bRByZip.hasOwnProperty(zipcode)) {
-      var { prices, reserved } = rentalAnalysis[zipcode]
-      bRByZip[zipcode] = Math.round(100 * (reserved.length/(prices.length + reserved.length))) / 100;
-    }
-
-    var booking_rate = bRByZip[zipcode];
+    var booking_rate = bookingRateByZip[zipcode];
+    
     var earnings = Math.round(booking_rate * days * price);
 
     res.send({ earnings })
