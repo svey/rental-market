@@ -4,12 +4,12 @@
   "description": "An API to gauge the short term rental market on price, booking_rate, and earnings.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "Marcus Svehlak github.com/svey",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
-    "express": "^4.15.3",
+    "express": "^4.15.3"
   }
 }
