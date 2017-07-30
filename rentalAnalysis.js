@@ -1,53 +1,42 @@
 var data = require('./data.json')
-//var parsedData = JSON.parse(data);
 
-var sortPropertiesByZip = function(array) {
-  var zipHash = {}
+var sortDataByZip = function(array) {
+  var zipHash = {};
 
   for(var i = 0; i < array.length; i++) {
-    if(zipHash.hasOwnProperty(array[i].zipcode)) {
-      zipHash[array[i].zipcode].push(array[i]);
-      continue;
-    }
-    zipHash[array[i].zipcode] = [array[i]];
-  }
-  return zipHash
-}
-
-var sortInfoByZip = function(obj) {
-  var output = {}
-  for(var zip in obj) {
-    output[zip] = {
-      prices: [],
-      bedrooms: [],
-      reserved: []
+    var zipcode = array[i].zipcode
+    if(!zipHash.hasOwnProperty(zipcode)) {
+      zipHash[zipcode] = {
+        prices: [],
+        bedrooms: [],
+        reserved: []
+      };
     };
-    for(var i = 0; i < obj[zip].length; i++) {
-      for(var key in obj[zip][i]) {
-        switch(key) {
-          case 'property_id':
-            break;
-          case 'zipcode':
-            break;
-          case 'bedrooms':
-            break;
-          case 'accomodates':
-            break;
-          default:
-            if(!isNaN(obj[zip][i][key])){
-              output[zip].prices.push(obj[zip][i][key]);
-              output[zip].bedrooms.push(obj[zip][i].bedrooms);
-            } else if(obj[zip][i][key] === 'reserved') {
-              output[zip].reserved.push('reserved')
-            }
-        }
+    
+    for(var key in array[i]) {
+      switch(key) {
+        case 'property_id':
+          break;
+        case 'zipcode':
+          break;
+        case 'bedrooms':
+          break;
+        case 'accomodates':
+          break;
+        default:
+          if(!isNaN(array[i][key])){
+            zipHash[zipcode].prices.push(array[i][key]);
+            zipHash[zipcode].bedrooms.push(array[i].bedrooms);
+          } else if(array[i][key] === 'reserved') {
+            zipHash[zipcode].reserved.push('reserved')
+          }
       }
-    }    
+    }
   }
-  return output;
+  return zipHash;
 }
 
-var propertiesByZip = sortPropertiesByZip(data);
-var propertyInfoByZip = sortInfoByZip(propertiesByZip);
+var rentalAnalysis = sortDataByZip(data);
 
-module.exports = propertyInfoByZip;
+
+module.exports = rentalAnalysis;
