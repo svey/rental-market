@@ -4,7 +4,7 @@ var sortDataByZip = function(array) {
   var zipHash = {};
 
   for(var i = 0; i < array.length; i++) {
-    var zipcode = array[i].zipcode
+    var zipcode = array[i].zipcode;
     if(!zipHash.hasOwnProperty(zipcode)) {
       zipHash[zipcode] = {
         prices: [],
@@ -28,7 +28,7 @@ var sortDataByZip = function(array) {
             zipHash[zipcode].prices.push(array[i][key]);
             zipHash[zipcode].bedrooms.push(array[i].bedrooms);
           } else if(array[i][key] === 'reserved') {
-            zipHash[zipcode].reserved.push('reserved')
+            zipHash[zipcode].reserved.push('reserved');
           }
       }
     }
@@ -37,6 +37,5 @@ var sortDataByZip = function(array) {
 }
 
 var rentalAnalysis = sortDataByZip(data);
-
 
 module.exports = rentalAnalysis;

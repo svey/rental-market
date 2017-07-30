@@ -35,7 +35,7 @@ function numberOfDays(start, end) {
 
 // middleware to check if we have linearRegression and bookingRate obj for a zip before each request
 router.use('/', function(req, res, next) {
-  var zipcode = req.body.zipcode
+  var zipcode = req.body.zipcode;
   var { prices, bedrooms, reserved } = rentalAnalysis[zipcode];
   // if lR by zip not found calculate and store it
   if(!linearRegressionByZip.hasOwnProperty(zipcode)) {
@@ -48,7 +48,7 @@ router.use('/', function(req, res, next) {
   next();
 });
 
-// middle where to handle errors
+// middle where to handle if the service can’t provide a reasonable estimation for the given inputs
 router.use('/', function(err, req, res, next) {
   if(err) {
     res.status(404).send('Oh no, 404! Something broke!')
@@ -84,6 +84,7 @@ router.route('/earnings').post(function(req, res) {
     var days = numberOfDays(start_date, end_date); 
     var price = getPrice(zipcode, bedroom_count);
     var booking_rate = getBookingRate(zipcode);
+    
     var earnings = getEarnings(booking_rate, days, price);
     res.send({ earnings });
   });
