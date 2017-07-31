@@ -1,14 +1,13 @@
 # Rental Market
 
-A simple API for POSTing property info and recieving rental information regarding price, booking rate, and earnings.
+A simple API for POSTing property info and receiving rental information regarding price, booking rate, and earnings. The rental-market uses dummy data and linear regression to model the relationship between rental price and rooms across properties in the same zip code.
 
 ## To use:
-1. Fork the Repo to your personal GitHub
-2. Clone/ or download to your computer
-3. From the Repo's local directory on your machine in Terminal or CommandPrompt run:
+1. From the Repo's local directory on your machine in Terminal or CommandPrompt run:
     + npm install  
     + npm start  
-4. The API can be easily tested using Postman https://www.getpostman.com/
+2. The API can be easily tested using Postman https://www.getpostman.com/  
+    Note: Postman request should be made with urlencoded
 
 ## Endpoints at http://localhost:3000/api
 + ### /price  
