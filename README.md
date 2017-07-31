@@ -7,7 +7,7 @@ A simple API for POSTing property info and receiving rental information regardin
     + npm install  
     + npm start  
 2. The API can be easily tested using Postman https://www.getpostman.com/  
-    Note: Postman request should be made with urlencoded
+    Note: Postman request should be made with urlencoded or raw JSON
 
 ## Endpoints at http://localhost:3000/api
 + ### /price  
