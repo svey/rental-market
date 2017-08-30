@@ -10,5 +10,5 @@ app.use(bodyParser.json());
 app.use('/api', routes);
 
 app.listen(port, function() {
-  console.log('Your local host has fluffed your Pillow @ ::' + port);
+  console.log('Your local host is ready @ ::' + port);
 });
