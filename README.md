@@ -1,6 +1,6 @@
 # Rental Market
 
-A simple API for POSTing property info and receiving rental information regarding price, booking rate, and earnings. The rental-market uses dummy data and linear regression to model the relationship between rental price and rooms across properties in the same zip code.
+An API for POSTing property info and receiving rental information regarding price, booking rate, and earnings. The rental-market uses dummy data and linear regression to model the relationship between rental price and rooms across properties in the same zip code.
 
 ## To use:
 1. From the Repo's local directory on your machine in Terminal or CommandPrompt run:
